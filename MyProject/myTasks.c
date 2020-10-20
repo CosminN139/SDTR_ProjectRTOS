@@ -107,12 +107,21 @@ void vFlashLEDTask2(void *pvParameters)
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////
+/*
+*Another conclusion , after i messed a bit with the functions that deals with the external interrups
+*It is not so straightforward as i seen in the os manual,from the fact that for AVR chips doesn't have 
+*a pretty good designated descriptor for interrupt handling without queues or oter task scheduling stuff
+*But after a bit of search on some obsolete parts of google and some beers taken apart i found that function
+*vPortYieldFromTick returns the stack pointer from the interrupt service routine in the main program 
+*/
 void vIntTask(void *pvParameters)
 {	
-	
+	vLEDTestInit();
 	while(1)
 	{
 		vTaskSuspend(myTaskHandle);
 		vLEDIntToggle();
+		
 	}
 }

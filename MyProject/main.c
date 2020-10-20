@@ -24,9 +24,9 @@
 *Messing with different delay implementations in the system , why are they good in some cases and why not in others
 *Creating more tasks for the system -> more blinks for me , yey
 			
-			*****Fourth prototype*****
+			*****Fourth prototype -> done*****
 *Complicated my life ,again, with interrupts...let's see what is going to happen here
-
+*Update,after half of day of hardcore research and some beers, it finally works, been there done that :)
 */
 
 //compiler-defined includes
