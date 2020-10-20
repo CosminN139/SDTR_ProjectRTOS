@@ -12,9 +12,13 @@
 
 
 /*
-			*****First prototype*****
+			*****First prototype -> done*****
 * In this part of the project i am going to blink a led at one second interval, pretty much basic stuff 
 * yet fundamental for testing the good functioning of the system on uC 
+
+			*****Second prototype -> done*****
+*In this part of the project i am going to separate all the functions and tasks of the system in distinct files
+*for easy interpreting of the code
 */
 
 //compiler-defined includes
@@ -33,7 +37,8 @@
 
 portSHORT main(void)
 {
-   xTaskCreate(vFlashLEDTask, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
+   xTaskCreate(vFlashLEDTask1, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
+   xTaskCreate(vFlashLEDTask2, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
    
    vTaskStartScheduler();
    

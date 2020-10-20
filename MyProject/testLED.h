@@ -10,12 +10,20 @@
 #ifndef TESTLED_H_
 #define TESTLED_H_
 
-#define PORT_LED	PORTB
-#define DDR_LED		DDRB
-#define BIT_LED		2
+//////////////////////////////////////////////////////////////////////////
+/* Port defining for our little leds*/
+#define PORT_LED1		PORTB
+#define DDR_LED1		DDRB
+#define BIT_LED1		1
 
-void vLEDTestInit	(void);
-void vLEDTestToggle	(void);
+#define PORT_LED2		PORTB
+#define DDR_LED2		DDRB
+#define BIT_LED2		2
+//////////////////////////////////////////////////////////////////////////
 
+
+void vLEDTestInit		(void);
+void vLEDTestToggle1	(void);
+void vLEDTestToggle2	(void);
 
 #endif /* TESTLED_H_ */

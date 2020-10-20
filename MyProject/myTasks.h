@@ -13,8 +13,8 @@
 #define LED_TASK_PRIORITY	(tskIDLE_PRIORITY)
 
 //let's prototype some functions
-void vFlashLEDTask	(void *pvParameters);
-
+void vFlashLEDTask1	(void *pvParameters);
+void vFlashLEDTask2	(void *pvParameters);
 
 
 #endif /* MYTASKS_H_ */
