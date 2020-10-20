@@ -19,6 +19,10 @@
 			*****Second prototype -> done*****
 *In this part of the project i am going to separate all the functions and tasks of the system in distinct files
 *for easy interpreting of the code
+
+			*****Third prototype *****
+*Messing with different delay implementations in the system , why are they good in some cases and why not in others
+*Creating more tasks for the system -> more blinks for me , yey
 */
 
 //compiler-defined includes

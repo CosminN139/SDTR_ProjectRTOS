@@ -13,6 +13,8 @@
 In this file we'll be defining tasks for our system
 
 First , i'm gona make the led blinking work again also in this structure 
+
+Second , i started to mess with different delay functions to see which is best to use in our system
 */
 //////////////////////////////////////////////////////////////////////////
 
@@ -26,16 +28,17 @@ First , i'm gona make the led blinking work again also in this structure
 #include "myTasks.h"
 #include "testLED.h"
 
+//global variables
+
 void vFlashLEDTask1 (void *pvParameters)
 {
 	vLEDTestInit();
 	
-	/*Parameters used for first delay function
+	/*Parameters used for first delay function*/
+	const portTickType xFrequency = 1000 *	(	configTICK_RATE_HZ / 1000	);	
+	portTickType	xLastWakeTimeLED1;	
+	xLastWakeTimeLED1 = xTaskGetTickCount();
 	
-	portTickType	xLastWakeTime;
-	const portTickType xFrequency = 1000;
-	xLastWakeTime = xTaskGetTickCount();
-	*/
 	
 	while(1)
 	{
@@ -43,13 +46,13 @@ void vFlashLEDTask1 (void *pvParameters)
 		/*experimenting with delays*/
 		
 		// the original one , first discovered with the example:
-		/*
-		vTaskDelayUntil(&xLastWakeTime , xFrequency); // 1sec delay		
-		*/
+		
+		vTaskDelayUntil(&xLastWakeTimeLED1 , xFrequency); // 1sec delay		
+		
 		
 		//other implementation of delay , i found it much easier to implement	:	
 		
-		vTaskDelay(1000 * (	configTICK_RATE_HZ / 1000	));
+		//vTaskDelay(1000 * (	configTICK_RATE_HZ / 1000	));
 		
 		//pretty much the same , but in this case the formula is ** (number of ticks * ( freqency of ticks / 1000)) **
 		//in our case because we defined in conf file the tick rate at 1000 the delay will be at exactly 1 sec everytime
@@ -69,6 +72,19 @@ void vFlashLEDTask1 (void *pvParameters)
 	}
 
 }
+//////////////////////////////////////////////////////////////////////////
+/*
+*As a first conclusion , the second and third delay functions i messed around the software are a bit imprecise
+*Why imprecise? Well because the CPU while ticking the interval put in that delay function starts another task
+*If that task lasts longer or a bit less than the ticking in the delay the cpu halts that tick and execute the rest of instructions after that
+*So then the delay, in my function, is set to 1sec , but in reality could be 950ms or 1010ms
+*In a non-time critical application i can use the second or third delay functions
+*!!!!!!But if it is a time-critical app then the first function is mandatory because it makes the delay at the time specified!!!!!
+*The bad thing seen at the first delay function is the amount of variables that i need to use
+*More variables means more memory used...and that's not a pretty good thing sometimes
+*So for this usage we need a pretty good optimisation
+*/
+
 	//////////////////////////////////////////////////////////////////////////
 	//let's add another task in the game
 
@@ -76,11 +92,16 @@ void vFlashLEDTask1 (void *pvParameters)
 void vFlashLEDTask2(void *pvParameters)
 {
 	vLEDTestInit();
+		const portTickType xFrequency2 = 500 *	(	configTICK_RATE_HZ / 1000	);
+		portTickType	xLastWakeTimeLED2;
+		xLastWakeTimeLED2 = xTaskGetTickCount();
 	
 	while(1)
 	{
 		vLEDTestToggle2();
-		vTaskDelay (500 * (	configTICK_RATE_HZ / 1000	));
+		//vTaskDelay (500 * (	configTICK_RATE_HZ / 1000	)); 
+		//we'll use this ... another time yeah
+		vTaskDelayUntil (&xLastWakeTimeLED2 , xFrequency2);
 	}
 }
 

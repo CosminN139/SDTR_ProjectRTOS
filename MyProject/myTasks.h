@@ -12,6 +12,7 @@
 //let's define some task priorities
 #define LED_TASK_PRIORITY	(tskIDLE_PRIORITY)
 
+
 //let's prototype some functions
 void vFlashLEDTask1	(void *pvParameters);
 void vFlashLEDTask2	(void *pvParameters);
