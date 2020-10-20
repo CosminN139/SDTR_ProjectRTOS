@@ -215,6 +215,18 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="myTasks.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="myTasks.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="testLED.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="testLED.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FreeRTOS\" />

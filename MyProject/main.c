@@ -17,56 +17,19 @@
 * yet fundamental for testing the good functioning of the system on uC 
 */
 
+//compiler-defined includes
 #include <avr/io.h>
 
+//aditional system-defined includes
 #include "FreeRTOS.h"
 #include "task.h"
 
-
-//let's define some ports for our little led to glow on rtos
-#define PORT_LED	PORTB
-#define DDR_LED		DDRB
-#define BIT_LED		2
-
-//let's define some task priorities
-#define LED_TASK_PRIORITY	(tskIDLE_PRIORITY)
+//user-defined includes
+#include "myTasks.h"
+#include "testLED.h"
 
 
-//*******************************************************************************************************************************************
-
-//now let's prototype a function to initialize the output
-
-void vLEDTestInit(void)
-{	
-	//set PORTB direction to output
-	DDR_LED  |=	 (1	<< BIT_LED);
-	PORT_LED &= ~(1	<< BIT_LED);
-}
-
-
-void vLEDTestToggle (void)
-{
-	vTaskSuspendAll();
-	{
-		PORT_LED ^= (1	<<	BIT_LED);
-	}
-	xTaskResumeAll();
-}
-
-//now let's prototype a task for toggling the led
-
-void vFlashLEDTask (void *pvParameters)
-{
-	vLEDTestInit();
-	portTickType	xLastWakeTime;
-	const portTickType xFrequency = 1000;
-	xLastWakeTime = xTaskGetTickCount();
-	for( ;; )
-	{
-		vLEDTestToggle();
-		vTaskDelayUntil(&xLastWakeTime , xFrequency);
-	}
-}
+//////////////////////////////////////////////////////////////////////////
 
 portSHORT main(void)
 {
@@ -74,6 +37,7 @@ portSHORT main(void)
    
    vTaskStartScheduler();
    
+   //the system should not reach this
     while (1) 
     {
     }
