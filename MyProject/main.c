@@ -20,9 +20,13 @@
 *In this part of the project i am going to separate all the functions and tasks of the system in distinct files
 *for easy interpreting of the code
 
-			*****Third prototype *****
+			*****Third prototype -> done*****
 *Messing with different delay implementations in the system , why are they good in some cases and why not in others
 *Creating more tasks for the system -> more blinks for me , yey
+			
+			*****Fourth prototype*****
+*Complicated my life ,again, with interrupts...let's see what is going to happen here
+
 */
 
 //compiler-defined includes
@@ -35,14 +39,19 @@
 //user-defined includes
 #include "myTasks.h"
 #include "testLED.h"
+#include "extFunctionality.h"
 
+//global variables,magic numbers etc.
 
 //////////////////////////////////////////////////////////////////////////
 
 portSHORT main(void)
-{
+{	
+	ext_int_init();
+	
    xTaskCreate(vFlashLEDTask1, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
    xTaskCreate(vFlashLEDTask2, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
+   xTaskCreate(vIntTask	     , (const char *) "interrupt" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , &myTaskHandle);
    
    vTaskStartScheduler();
    

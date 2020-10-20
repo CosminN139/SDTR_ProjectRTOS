@@ -19,6 +19,7 @@ Second , i started to mess with different delay functions to see which is best t
 //////////////////////////////////////////////////////////////////////////
 
 //compiler-defined includes
+#include <avr/interrupt.h>
 
 //aditional system-defined includes
 #include "FreeRTOS.h"
@@ -88,6 +89,7 @@ void vFlashLEDTask1 (void *pvParameters)
 	//////////////////////////////////////////////////////////////////////////
 	//let's add another task in the game
 
+TaskHandle_t myTaskHandle	 = NULL;
 
 void vFlashLEDTask2(void *pvParameters)
 {
@@ -105,4 +107,12 @@ void vFlashLEDTask2(void *pvParameters)
 	}
 }
 
-
+void vIntTask(void *pvParameters)
+{	
+	
+	while(1)
+	{
+		vTaskSuspend(myTaskHandle);
+		vLEDIntToggle();
+	}
+}

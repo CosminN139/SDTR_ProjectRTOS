@@ -125,6 +125,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="extFunctionality.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="extFunctionality.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="FreeRTOS\Source\croutine.c">
       <SubType>compile</SubType>
     </Compile>

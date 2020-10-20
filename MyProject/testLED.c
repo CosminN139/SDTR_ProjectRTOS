@@ -30,6 +30,9 @@ void vLEDTestInit(void)
 	
 	DDR_LED2  |=	 (1	<< BIT_LED2);
 	PORT_LED2 &=	~(1	<< BIT_LED2);
+	
+	DDR_LEDint  |=	 (1	<< BIT_LEDint);
+	PORT_LEDint &=	~(1	<< BIT_LEDint);
 }
 
 
@@ -47,6 +50,15 @@ void vLEDTestToggle2 (void)
 	vTaskSuspendAll();
 	{
 		PORT_LED2 ^= (1	<<	BIT_LED2);
+	}
+	xTaskResumeAll();
+}
+
+void vLEDIntToggle (void)
+{
+	vTaskSuspendAll();
+	{
+		PORT_LEDint ^= (1	<<	BIT_LEDint);
 	}
 	xTaskResumeAll();
 }
