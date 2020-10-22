@@ -24,9 +24,11 @@
 
 /*
 let's handle an external interrupt 
+
+*As for a classic embedded software , for handling an interrupt we need an ISR(interrupt service routine) that is trigered
+*using a flag. That flag could be obtained using a timer ,which can be an overflow flag or a compare flag , or external by 
+*triggering a designated pin
 */
-
-
 
 ISR(INT7_vect)
 {	
