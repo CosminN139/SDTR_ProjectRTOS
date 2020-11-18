@@ -7,6 +7,7 @@
 
 //compiler-defined includes
 #include <avr/interrupt.h>
+#include <inttypes.h>
 
 //aditional system-defined includes
 #include "FreeRTOS.h"
@@ -16,6 +17,7 @@
 //user-defined includes
 #include "myTasks.h"
 #include "testLED.h"
+#include "LCD_Driver.h"
 #include "extFunctionality.h"
 
 //global variables,magic numbers etc.
@@ -32,8 +34,16 @@ let's handle an external interrupt
 
 ISR(INT7_vect)
 {	
-	xTaskResumeFromISR(myTaskHandle);
-	vPortYieldFromTick();
+	LCDcursorOFF();
+	LCDclr();	
+	LCDGotoXY	(0	, 3	);
+	
+	LCDstring	(	"INTERRUPT OCCURED!",	18	);
+	LCDcursorOnBlink();	
+	LCDGotoXY	(0	,	0);
+	
+	xTaskResumeFromISR	(	myTaskHandle	);
+	//vPortYieldFromTick();
   	
 }
 
@@ -57,7 +67,7 @@ Usage:
 *What does this mean? Every interrupt will be generated only on falling/rising edge of clock signal 
 */
 {	
-	DDR_INText	&=	~(	1 << BIT_INText		);	//Set a pin correspondig to an interrupt as an input
+	DDR_INText	&=	~(	1 << BIT_INText		);	//Set a pin corresponding to an interrupt as an input
 	PORT_INText	|=	 (	1 << BIT_INText		);	//Defining a pull-up to prevent input floating
 	
 	EICRB		|=	 (	1 << ISC70			);	//Any logical change on INT7 generates an interrupt req

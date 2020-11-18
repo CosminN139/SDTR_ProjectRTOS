@@ -11,6 +11,7 @@
 
 //let's define some task priorities
 #define LED_TASK_PRIORITY	(tskIDLE_PRIORITY)
+#define LCD_TASK_PRIORITY	(tskIDLE_PRIORITY)
 
 TaskHandle_t myTaskHandle;
 
@@ -18,5 +19,6 @@ TaskHandle_t myTaskHandle;
 void vFlashLEDTask1	(void *pvParameters);
 void vFlashLEDTask2	(void *pvParameters);
 void vIntTask		(void *pvParameters);
+void vLCDUpdateTask  (void *pvParameters);
 
 #endif /* MYTASKS_H_ */

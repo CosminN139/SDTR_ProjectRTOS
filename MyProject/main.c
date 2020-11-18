@@ -27,7 +27,16 @@
 			*****Fourth prototype -> done*****
 *Complicated my life ,again, with interrupts...let's see what is going to happen here
 *Update,after half of day of hardcore research and some beers, it finally works, been there done that :)
+
+		    *****Fifth prototype*****
+*After struggling a bit with the interrupts and stuff like that, it is the time to add some peripherals to our board
+*So in this update we'll have a pretty much functional LCD driver with some tasks to treat with our already functional example.
+*After some long sessions is finnaly alive!!!!!
+
+*TO DO: A little bit of messing with the memory locations of each point on LCD and reach a better timing for each function
 */
+
+
 
 //compiler-defined includes
 #include <avr/io.h>
@@ -40,6 +49,7 @@
 #include "myTasks.h"
 #include "testLED.h"
 #include "extFunctionality.h"
+#include "LCD_Driver.h"
 
 //global variables,magic numbers etc.
 
@@ -47,11 +57,14 @@
 
 portSHORT main(void)
 {	
+
+	
 	ext_int_init();
 	
    xTaskCreate(vFlashLEDTask1, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
-   xTaskCreate(vFlashLEDTask2, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
+   //xTaskCreate(vFlashLEDTask2, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
    xTaskCreate(vIntTask	     , (const char *) "interrupt" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , &myTaskHandle);
+   xTaskCreate(vLCDUpdateTask , (const char *) "LCD start routine" , configMINIMAL_STACK_SIZE , NULL , LCD_TASK_PRIORITY , NULL);
    
    vTaskStartScheduler();
    

@@ -15,11 +15,18 @@ In this file we'll be defining tasks for our system
 First , i'm gona make the led blinking work again also in this structure 
 
 Second , i started to mess with different delay functions to see which is best to use in our system
+
+Third, i added an external interrupt to the system
+
+Fourth , an LCD appeared in the scene
+Made an reliable driver for it , transmits 8bit data format and configuration signals to mess with
+every part of HD44870 controller features
 */
 //////////////////////////////////////////////////////////////////////////
 
 //compiler-defined includes
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 
 //aditional system-defined includes
 #include "FreeRTOS.h"
@@ -28,8 +35,45 @@ Second , i started to mess with different delay functions to see which is best t
 //user-defined includes
 #include "myTasks.h"
 #include "testLED.h"
+#include "LCD_Driver.h"
 
 //global variables
+
+void vLCDUpdateTask( void *pvParameters )
+{
+	static const uint8_t welcomeln1[] PROGMEM="FreeRTOS DEMO";
+	portTickType xLastWakeTime;
+	const portTickType xFrequency = 500;
+	xLastWakeTime=xTaskGetTickCount();
+	unsigned portBASE_TYPE uxTasks;
+	LCDinit();
+	LCDclr();
+	LCDcursorOFF();
+	CopyStringtoLCD(welcomeln1, 0, 0);
+	//LCDcursorOn();
+	LCDcursorOnBlink();
+	while(1)
+	{
+		//uxTasks=uxTaskGetNumberOfTasks();
+		
+		//works only up to 9 tasks
+		//LCDsendChar(uxTasks+48);
+		/*if (xButtonSemaphore != NULL)
+		{
+			LCDGotoXY(3,1);
+			//poll
+			if (xSemaphoreTake(xButtonSemaphore, (portTickType)0)==pdTRUE)
+			{
+				LCDsendChar('1');
+			}
+			else
+			{
+				LCDsendChar('0');
+			}
+		}*/
+		//vTaskDelayUntil(&xLastWakeTime,xFrequency);
+	}
+}
 
 void vFlashLEDTask1 (void *pvParameters)
 {
@@ -117,6 +161,7 @@ void vFlashLEDTask2(void *pvParameters)
 */
 void vIntTask(void *pvParameters)
 {	
+
 	vLEDTestInit();
 	while(1)
 	{
@@ -125,3 +170,4 @@ void vIntTask(void *pvParameters)
 		
 	}
 }
+
