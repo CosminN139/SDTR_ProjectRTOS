@@ -34,3 +34,8 @@ What to do for next?
 - Second , well this is going to be first for sure .. starting to mess with queues , semaphors , notifications and so on
 - Third , i am totally sure that this point will be the one star , start to add some peripherals to the board , like an LCD , some RS232 communication.
 - Third star , will see what sensor i add to this thing..
+
+***
+Updates from last time i've wrote some code:
+  Yeah , pretty much dusty here
+- Added functionality for HD44870-compatible controller LCD stuff. Pretty hard to do this with RTOS, well..
