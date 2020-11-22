@@ -10,15 +10,19 @@
 #define MYTASKS_H_
 
 //let's define some task priorities
-#define LED_TASK_PRIORITY	(tskIDLE_PRIORITY)
-#define LCD_TASK_PRIORITY	(tskIDLE_PRIORITY)
+#define LED_TASK_PRIORITY						(tskIDLE_PRIORITY)
+#define LCD_TASK_PRIORITY						(tskIDLE_PRIORITY)
+#define mainButton_TASK_PRIORITY				( tskIDLE_PRIORITY + 1 )
 
 TaskHandle_t myTaskHandle;
+
+extern xSemaphoreHandle xButtonSemaphore;
 
 //let's prototype some functions
 void vFlashLEDTask1	(void *pvParameters);
 void vFlashLEDTask2	(void *pvParameters);
 void vIntTask		(void *pvParameters);
 void vLCDUpdateTask  (void *pvParameters);
+void vButtonCheckTask( void *pvParameters );
 
 #endif /* MYTASKS_H_ */

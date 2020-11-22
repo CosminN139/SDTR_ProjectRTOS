@@ -31,6 +31,7 @@ every part of HD44870 controller features
 //aditional system-defined includes
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
 
 //user-defined includes
 #include "myTasks.h"
@@ -39,9 +40,29 @@ every part of HD44870 controller features
 
 //global variables
 
+void vButtonCheckTask( void *pvParameters )
+{
+	portTickType xLastWakeTime;
+	const portTickType xFrequency = 20;
+	xLastWakeTime=xTaskGetTickCount();
+	xSemaphoreTake(xButtonSemaphore, (portTickType)0);
+	vButtonInit();
+	while(1)
+	{
+		if (xButtonGetStatus()==pdTRUE)
+		{
+			xSemaphoreGive(xButtonSemaphore);
+		}
+		vTaskDelayUntil(&xLastWakeTime,xFrequency);
+	}
+}
+
 void vLCDUpdateTask( void *pvParameters )
 {
-	static const uint8_t welcomeln1[] PROGMEM="FreeRTOS DEMO";
+	static const uint8_t welcomeln1[] PROGMEM="FreeRTOS Software";
+	static const uint8_t eventln1[] PROGMEM="AM APASAT UN BUTONEL";
+	static const uint8_t buttonln1[] PROGMEM="BT:";
+	static const uint8_t tasksln1[] PROGMEM="TSKS:";
 	portTickType xLastWakeTime;
 	const portTickType xFrequency = 500;
 	xLastWakeTime=xTaskGetTickCount();
@@ -50,30 +71,35 @@ void vLCDUpdateTask( void *pvParameters )
 	LCDclr();
 	LCDcursorOFF();
 	CopyStringtoLCD(welcomeln1, 0, 0);
-	//LCDcursorOn();
+	CopyStringtoLCD(buttonln1, 0, 1);
+	CopyStringtoLCD(tasksln1, 7, 1);
+	LCDcursorOn();
 	LCDcursorOnBlink();
 	while(1)
 	{
-		//uxTasks=uxTaskGetNumberOfTasks();
-		
+		uxTasks=uxTaskGetNumberOfTasks();
+		LCDGotoXY(13,1);
 		//works only up to 9 tasks
-		//LCDsendChar(uxTasks+48);
-		/*if (xButtonSemaphore != NULL)
+		LCDsendChar(uxTasks+48);
+		if (xButtonSemaphore != NULL)
 		{
 			LCDGotoXY(3,1);
 			//poll
 			if (xSemaphoreTake(xButtonSemaphore, (portTickType)0)==pdTRUE)
 			{
 				LCDsendChar('1');
+				CopyStringtoLCD(eventln1, 0, 2);
+				
 			}
 			else
 			{
 				LCDsendChar('0');
 			}
-		}*/
-		//vTaskDelayUntil(&xLastWakeTime,xFrequency);
+		}
+		vTaskDelayUntil(&xLastWakeTime,xFrequency);
 	}
 }
+
 
 void vFlashLEDTask1 (void *pvParameters)
 {
@@ -167,6 +193,13 @@ void vIntTask(void *pvParameters)
 	{
 		vTaskSuspend(myTaskHandle);
 		vLEDIntToggle();
+		LCDcursorOFF();
+		LCDclr();
+		LCDGotoXY	(0	, 3	);		
+		LCDstring	(	"INTERRUPT OCCURED!",	18	);
+		LCDcursorOnBlink();
+		LCDGotoXY	(0	,	0);
+		LCDclr();
 		
 	}
 }

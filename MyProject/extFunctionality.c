@@ -13,6 +13,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "portmacro.h"
+#include "semphr.h"
 
 //user-defined includes
 #include "myTasks.h"
@@ -34,13 +35,6 @@ let's handle an external interrupt
 
 ISR(INT7_vect)
 {	
-	LCDcursorOFF();
-	LCDclr();	
-	LCDGotoXY	(0	, 3	);
-	
-	LCDstring	(	"INTERRUPT OCCURED!",	18	);
-	LCDcursorOnBlink();	
-	LCDGotoXY	(0	,	0);
 	
 	xTaskResumeFromISR	(	myTaskHandle	);
 	//vPortYieldFromTick();
@@ -72,4 +66,24 @@ Usage:
 	
 	EICRB		|=	 (	1 << ISC70			);	//Any logical change on INT7 generates an interrupt req
 	EIMSK		|=	 (	1 << INT7			);	//Puts the status register(sREG) for that interrupt in 1, so the interrupt is enabled
+}
+
+void vButtonInit(void)
+{
+	// Set SWITCH_IP as input pin
+	DDR_SWITCH_IP &= ~(1<<BIT_SWITCH_IP);
+	// Enable pull-up on SWITCH_IP
+	PORT_SWITCH_IP |= (1<<BIT_SWITCH_IP);
+}
+char xButtonGetStatus(void)
+{
+	// See if switch is pressed
+	if((PIN_SWITCH_IP&(1<<BIT_SWITCH_IP)) == 0)
+	{
+		return pdTRUE;
+	}
+	else
+	{
+		return pdFALSE;
+	}
 }

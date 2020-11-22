@@ -28,9 +28,9 @@
 #include "include/delay.h"
 
 //user-defined includes
-#include "myTasks.h"
 #include "testLED.h"
 #include "LCD_Driver.h"
+
 
 const uint8_t LcdCustomChar[] PROGMEM=//define 8 custom LCD chars
 {

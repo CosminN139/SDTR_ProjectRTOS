@@ -15,6 +15,13 @@
 #define DDR_INText		DDRE
 #define BIT_INText		7
 
+#define PORT_SWITCH_IP  PORTB
+#define DDR_SWITCH_IP   DDRB
+#define PIN_SWITCH_IP   PINB
+#define BIT_SWITCH_IP   7
+
+void vButtonInit(void);
+char xButtonGetStatus(void);
 
 //////////////////////////////////////////////////////////////////////////
 

@@ -34,6 +34,8 @@
 *After some long sessions is finnaly alive!!!!!
 
 *TO DO: A little bit of messing with the memory locations of each point on LCD and reach a better timing for each function
+
+Added a little feature...a button without interrupts. Its main task is to print something on LCD.
 */
 
 
@@ -44,6 +46,7 @@
 //aditional system-defined includes
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
 
 //user-defined includes
 #include "myTasks.h"
@@ -51,19 +54,26 @@
 #include "extFunctionality.h"
 #include "LCD_Driver.h"
 
+
 //global variables,magic numbers etc.
+xSemaphoreHandle xButtonSemaphore=NULL;
 
 //////////////////////////////////////////////////////////////////////////
 
 portSHORT main(void)
-{	
-
-	
+{		
 	ext_int_init();
 	
-   xTaskCreate(vFlashLEDTask1, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
+	vSemaphoreCreateBinary(xButtonSemaphore);
+	if(xButtonSemaphore!=NULL)
+	{
+		//successfully created
+		xTaskCreate( vButtonCheckTask, ( signed char * ) "Button", configMINIMAL_STACK_SIZE, NULL, mainButton_TASK_PRIORITY, NULL );
+	}
+	
+   //xTaskCreate(vFlashLEDTask1, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
    //xTaskCreate(vFlashLEDTask2, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
-   xTaskCreate(vIntTask	     , (const char *) "interrupt" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , &myTaskHandle);
+   //xTaskCreate(vIntTask	     , (const char *) "interrupt" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , &myTaskHandle);
    xTaskCreate(vLCDUpdateTask , (const char *) "LCD start routine" , configMINIMAL_STACK_SIZE , NULL , LCD_TASK_PRIORITY , NULL);
    
    vTaskStartScheduler();
