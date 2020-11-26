@@ -39,3 +39,9 @@ What to do for next?
 Updates from last time i've wrote some code:
   Yeah , pretty much dusty here
 - Added functionality for HD44870-compatible controller LCD stuff. Pretty hard to do this with RTOS, well..
+- Added button functionality using a binary semphor to test the usage
+
+TODO:
+
+- Add sensor library and make some prerequisites to drive it properly
+>> This sensor will be a temp/humid sensor from DHT/AMS family
