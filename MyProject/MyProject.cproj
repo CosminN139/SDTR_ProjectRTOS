@@ -125,10 +125,22 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="extFunctionality.c">
+    <Compile Include="demos\testLED.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="extFunctionality.h">
+    <Compile Include="demos\testLED.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="drivers\extFunctionality.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="drivers\extFunctionality.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="drivers\LCD_Driver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="drivers\LCD_Driver.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="FreeRTOS\Source\croutine.c">
@@ -221,12 +233,6 @@
     <Compile Include="include\FreeRTOSConfig.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LCD_Driver.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LCD_Driver.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
@@ -236,14 +242,10 @@
     <Compile Include="myTasks.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="testLED.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="testLED.h">
-      <SubType>compile</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="demos\" />
+    <Folder Include="drivers\" />
     <Folder Include="FreeRTOS\" />
     <Folder Include="FreeRTOS\License\" />
     <Folder Include="FreeRTOS\Source\" />

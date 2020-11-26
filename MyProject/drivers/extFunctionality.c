@@ -16,10 +16,10 @@
 #include "semphr.h"
 
 //user-defined includes
-#include "myTasks.h"
-#include "testLED.h"
-#include "LCD_Driver.h"
-#include "extFunctionality.h"
+#include "../myTasks.h"
+#include "../demos/testLED.h"
+#include "../drivers/LCD_Driver.h"
+#include "../drivers/extFunctionality.h"
 
 //global variables,magic numbers etc.
 

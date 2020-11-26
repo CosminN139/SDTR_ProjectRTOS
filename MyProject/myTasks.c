@@ -35,8 +35,9 @@ every part of HD44870 controller features
 
 //user-defined includes
 #include "myTasks.h"
-#include "testLED.h"
-#include "LCD_Driver.h"
+#include "demos/testLED.h"
+#include "drivers/LCD_Driver.h"
+#include "drivers/extFunctionality.h"
 
 //global variables
 
@@ -63,6 +64,7 @@ void vLCDUpdateTask( void *pvParameters )
 	static const uint8_t eventln1[] PROGMEM="AM APASAT UN BUTONEL";
 	static const uint8_t buttonln1[] PROGMEM="BT:";
 	static const uint8_t tasksln1[] PROGMEM="TSKS:";
+	static const uint8_t emptyln[] PROGMEM="                    ";
 	portTickType xLastWakeTime;
 	const portTickType xFrequency = 500;
 	xLastWakeTime=xTaskGetTickCount();
@@ -71,29 +73,30 @@ void vLCDUpdateTask( void *pvParameters )
 	LCDclr();
 	LCDcursorOFF();
 	CopyStringtoLCD(welcomeln1, 0, 0);
-	CopyStringtoLCD(buttonln1, 0, 1);
-	CopyStringtoLCD(tasksln1, 7, 1);
+	CopyStringtoLCD(buttonln1, 0, 2);
+	CopyStringtoLCD(tasksln1, 7, 2);
 	LCDcursorOn();
 	LCDcursorOnBlink();
 	while(1)
 	{
 		uxTasks=uxTaskGetNumberOfTasks();
-		LCDGotoXY(13,1);
+		LCDGotoXY(13,2);
 		//works only up to 9 tasks
 		LCDsendChar(uxTasks+48);
 		if (xButtonSemaphore != NULL)
 		{
-			LCDGotoXY(3,1);
+			LCDGotoXY(3,2);
 			//poll
 			if (xSemaphoreTake(xButtonSemaphore, (portTickType)0)==pdTRUE)
 			{
-				LCDsendChar('1');
-				CopyStringtoLCD(eventln1, 0, 2);
-				
+				LCDsendChar('1');				
+				CopyStringtoLCD(eventln1 , 0 , 3);
+				CopyStringtoLCD(emptyln , 0 , 3);
 			}
 			else
 			{
 				LCDsendChar('0');
+				
 			}
 		}
 		vTaskDelayUntil(&xLastWakeTime,xFrequency);
@@ -194,12 +197,11 @@ void vIntTask(void *pvParameters)
 		vTaskSuspend(myTaskHandle);
 		vLEDIntToggle();
 		LCDcursorOFF();
-		LCDclr();
 		LCDGotoXY	(0	, 3	);		
 		LCDstring	(	"INTERRUPT OCCURED!",	18	);
 		LCDcursorOnBlink();
-		LCDGotoXY	(0	,	0);
-		LCDclr();
+		LCDstring	("                    " , 20);
+
 		
 	}
 }

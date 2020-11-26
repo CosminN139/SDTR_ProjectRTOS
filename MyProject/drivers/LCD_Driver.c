@@ -25,11 +25,11 @@
 //aditional system-defined includes
 #include "FreeRTOS.h"
 #include "task.h"
-#include "include/delay.h"
+#include "../include/delay.h"
 
 //user-defined includes
-#include "testLED.h"
 #include "LCD_Driver.h"
+#include "../demos/testLED.h"
 
 
 const uint8_t LcdCustomChar[] PROGMEM=//define 8 custom LCD chars
@@ -127,6 +127,7 @@ void LCDstring(uint8_t* data, uint8_t nBytes)	//Outputs string to LCD
 		LCDsendChar(data[i]);
 	}
 }
+
 void LCDGotoXY(uint8_t x, uint8_t y)	//Cursor to X Y position
 {
 	register uint8_t DDRAMAddr;

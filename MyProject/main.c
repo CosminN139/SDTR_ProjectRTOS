@@ -33,9 +33,10 @@
 *So in this update we'll have a pretty much functional LCD driver with some tasks to treat with our already functional example.
 *After some long sessions is finnaly alive!!!!!
 
-*TO DO: A little bit of messing with the memory locations of each point on LCD and reach a better timing for each function
+*TO DO: A little bit of messing with the memory locations of each point on LCD and reach a better timing for each function//
 
 Added a little feature...a button without interrupts. Its main task is to print something on LCD.
+*made some hou
 */
 
 
@@ -50,9 +51,9 @@ Added a little feature...a button without interrupts. Its main task is to print 
 
 //user-defined includes
 #include "myTasks.h"
-#include "testLED.h"
-#include "extFunctionality.h"
-#include "LCD_Driver.h"
+#include "demos/testLED.h"
+#include "drivers/extFunctionality.h"
+#include "drivers/LCD_Driver.h"
 
 
 //global variables,magic numbers etc.
@@ -68,12 +69,12 @@ portSHORT main(void)
 	if(xButtonSemaphore!=NULL)
 	{
 		//successfully created
-		xTaskCreate( vButtonCheckTask, ( signed char * ) "Button", configMINIMAL_STACK_SIZE, NULL, mainButton_TASK_PRIORITY, NULL );
+		xTaskCreate( vButtonCheckTask, (const char* ) "Button", configMINIMAL_STACK_SIZE, NULL, mainButton_TASK_PRIORITY, NULL );
 	}
 	
-   //xTaskCreate(vFlashLEDTask1, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
-   //xTaskCreate(vFlashLEDTask2, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
-   //xTaskCreate(vIntTask	     , (const char *) "interrupt" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , &myTaskHandle);
+   xTaskCreate(vFlashLEDTask1, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
+   xTaskCreate(vFlashLEDTask2, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
+   xTaskCreate(vIntTask	     , (const char *) "interrupt" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , &myTaskHandle);
    xTaskCreate(vLCDUpdateTask , (const char *) "LCD start routine" , configMINIMAL_STACK_SIZE , NULL , LCD_TASK_PRIORITY , NULL);
    
    vTaskStartScheduler();
