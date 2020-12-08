@@ -40,6 +40,7 @@ Updates from last time i've wrote some code:
   Yeah , pretty much dusty here
 - Added functionality for HD44870-compatible controller LCD stuff. Pretty hard to do this with RTOS, well..
 - Added button functionality using a binary semphor to test the usage
+- Tried to integrate an alredy written DHT library in code, meh...to much errors for a little cheat. Rewrite the library myself.
 
 TODO:
 

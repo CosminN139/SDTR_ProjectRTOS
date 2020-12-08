@@ -131,6 +131,12 @@
     <Compile Include="demos\testLED.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="drivers\DHT.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="drivers\DHT.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="drivers\extFunctionality.c">
       <SubType>compile</SubType>
     </Compile>
@@ -230,7 +236,13 @@
     <Compile Include="include\delay.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="include\DHT_Settings.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="include\FreeRTOSConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="include\IO_Macros.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
