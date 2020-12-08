@@ -17,8 +17,7 @@
 #include <avr/io.h>
 
 #include "../include/delay.h"
-#include "../include/IO_Macros.h"
-#include "../include/DHT_Settings.h"
+#include "DHT_Settings.h"
 //----------------------//
 
 //----- Auxiliary data -------------------//

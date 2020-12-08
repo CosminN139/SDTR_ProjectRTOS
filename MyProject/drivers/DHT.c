@@ -1,5 +1,6 @@
 ﻿#include "DHT.h"
-
+#include "DHT_IO.h"
+#include "DHT_Settings.h"
 
 //----- Auxiliary data ----------//
 enum DHT_Status_t __DHT_STATUS;
@@ -26,6 +27,7 @@ static double ExtractHumidity(uint8_t Data1, uint8_t Data2);
 
 //----- Functions -----------------------------//
 //Setup sensor.
+
 void DHT_Setup()
 {
 	_delay_ms(__DHT_Delay_Setup);
@@ -110,43 +112,43 @@ enum DHT_Status_t DHT_ReadRaw(uint8_t Data[4])
 	{
 		//Reading 5 bytes, bit by bit
 		for (i = 0 ; i < 5 ; i++)
-			for (j = 7 ; j >= 0 ; j--)
+		for (j = 7 ; j >= 0 ; j--)
+		{
+			//There is always a leading low level of 50 us
+			retries = 0;
+			while(!DigitalRead(DHT_Pin))
 			{
-				//There is always a leading low level of 50 us
+				_delay_us(2);
+				retries += 2;
+				if (retries > 70)
+				{
+					__DHT_STATUS = DHT_Error_Timeout;	//Timeout error
+					j = -1;								//Break inner for-loop
+					i = 5;								//Break outer for-loop
+					break;								//Break while loop
+				}
+			}
+
+			if (__DHT_STATUS == DHT_Ok)
+			{
+				//We read data bit || 26-28us means '0' || 70us means '1'
+				_delay_us(35);							//Wait for more than 28us
+				if (DigitalRead(DHT_Pin))				//If HIGH
+				BitSet(buffer[i], j);				//bit = '1'
+
 				retries = 0;
-				while(!DigitalRead(DHT_Pin))
+				while(DigitalRead(DHT_Pin))
 				{
 					_delay_us(2);
 					retries += 2;
-					if (retries > 70)
+					if (retries > 100)
 					{
 						__DHT_STATUS = DHT_Error_Timeout;	//Timeout error
-						j = -1;								//Break inner for-loop
-						i = 5;								//Break outer for-loop
-						break;								//Break while loop
-					}
-				}
-
-				if (__DHT_STATUS == DHT_Ok)
-				{
-					//We read data bit || 26-28us means '0' || 70us means '1'
-					_delay_us(35);							//Wait for more than 28us
-					if (DigitalRead(DHT_Pin))				//If HIGH
-						BitSet(buffer[i], j);				//bit = '1'
-
-					retries = 0;
-					while(DigitalRead(DHT_Pin))
-					{
-						_delay_us(2);
-						retries += 2;
-						if (retries > 100)
-						{
-							__DHT_STATUS = DHT_Error_Timeout;	//Timeout error
-							break;
-						}
+						break;
 					}
 				}
 			}
+		}
 	}
 	//--------------------------------------
 
@@ -167,7 +169,7 @@ enum DHT_Status_t DHT_ReadRaw(uint8_t Data[4])
 			//data[3] = Temperature		(dec)
 			//data[4] = Checksum
 			for (i = 0 ; i < 4 ; i++)
-				Data[i] = buffer[i];
+			Data[i] = buffer[i];
 		}
 	}
 	//---------------------------------------------------

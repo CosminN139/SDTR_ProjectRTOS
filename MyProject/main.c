@@ -36,7 +36,7 @@
 *TO DO: A little bit of messing with the memory locations of each point on LCD and reach a better timing for each function//
 
 Added a little feature...a button without interrupts. Its main task is to print something on LCD.
-*made some hou
+*made some housekeeping
 */
 
 

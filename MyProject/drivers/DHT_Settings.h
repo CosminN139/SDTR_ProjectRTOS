@@ -13,8 +13,11 @@
 ||
 */
 
+#include "DHT.h"
+
+
 //----- Configuration --------------------------//
 #define DHT_Type	DHT22          //DHT11 or DHT22
-#define DHT_Pin		A, 7
+#define DHT_Pin		3
 //----------------------------------------------//
 #endif

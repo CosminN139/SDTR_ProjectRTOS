@@ -41,8 +41,10 @@ Updates from last time i've wrote some code:
 - Added functionality for HD44870-compatible controller LCD stuff. Pretty hard to do this with RTOS, well..
 - Added button functionality using a binary semphor to test the usage
 - Tried to integrate an alredy written DHT library in code, meh...to much errors for a little cheat. Rewrite the library myself.
+- Kinda added some hardcoded macros to hack the functionality of AVR-DHT library used for that sensor
+>> Library used: https://github.com/efthymios-ks/AVR-DHT
 
 TODO:
 
-- Add sensor library and make some prerequisites to drive it properly
+- Add sensor library and make some prerequisites to drive it properly -> Done
 >> This sensor will be a temp/humid sensor from DHT/AMS family
