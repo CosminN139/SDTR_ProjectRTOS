@@ -22,6 +22,7 @@
 
 void vButtonInit(void);
 char xButtonGetStatus(void);
+char xSensorGetStatus(void);
 
 //////////////////////////////////////////////////////////////////////////
 

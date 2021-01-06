@@ -57,24 +57,36 @@ Added a little feature...a button without interrupts. Its main task is to print 
 
 
 //global variables,magic numbers etc.
-xSemaphoreHandle xButtonSemaphore=NULL;
+xSemaphoreHandle xButtonSemaphore = NULL;
+xSemaphoreHandle xSensorSemaphor = NULL;
 
 //////////////////////////////////////////////////////////////////////////
 
 portSHORT main(void)
 {		
 	ext_int_init();
+
 	
 	vSemaphoreCreateBinary(xButtonSemaphore);
+	vSemaphoreCreateBinary(xSensorSemaphor);
+	
+	
+	
 	if(xButtonSemaphore!=NULL)
 	{
 		//successfully created
 		xTaskCreate( vButtonCheckTask, (const char* ) "Button", configMINIMAL_STACK_SIZE, NULL, mainButton_TASK_PRIORITY, NULL );
 	}
 	
-   xTaskCreate(vFlashLEDTask1, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
-   xTaskCreate(vFlashLEDTask2, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
-   xTaskCreate(vIntTask	     , (const char *) "interrupt" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , &myTaskHandle);
+	if(xSensorSemaphor != NULL)
+	{
+		xTaskCreate(vSensorCheck, (const char*) "Senzor Umiditate/Temp" , 2048 , NULL ,SENSOR_TASK_PRIORITY , NULL);
+	}
+	
+  // xTaskCreate(vFlashLEDTask1, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
+  //xTaskCreate(vFlashLEDTask2, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
+  //xTaskCreate(vIntTask	     , (const char *) "interrupt" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , &myTaskHandle);
+  
    xTaskCreate(vLCDUpdateTask , (const char *) "LCD start routine" , configMINIMAL_STACK_SIZE , NULL , LCD_TASK_PRIORITY , NULL);
    
    vTaskStartScheduler();

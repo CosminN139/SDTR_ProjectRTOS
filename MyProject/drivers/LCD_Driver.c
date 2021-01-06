@@ -267,3 +267,35 @@ void LCDprogressBar(uint8_t progress, uint8_t maxprogress, uint8_t length)
 	}
 
 }
+void LCD_printTempHum(uint16_t temp, unsigned char cur_count) {
+	
+	unsigned char ten_count = 0;
+	unsigned char hun_count = 0;
+
+	//LCDcursorRight(cur_count);
+	while( temp >= 100 ) {
+		hun_count++;
+		temp -= 100;
+	}
+	
+	LCDsendChar(hun_count + '0');
+	cur_count++;
+
+	//LCDcursorRight(cur_count);
+	while( temp >= 10 ) {
+		ten_count++;
+		temp -= 10;
+	}
+	
+	LCDsendChar(ten_count + '0');
+	cur_count++;
+	
+	//LCDcursorRight(cur_count);
+	LCDsendChar('.');
+	cur_count++;
+	
+	//LCDcursorRight(cur_count);
+	LCDsendChar((unsigned char) temp + '0');
+	
+	//LCDcursorRight(0);
+}

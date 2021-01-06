@@ -20,7 +20,7 @@
 #include "../demos/testLED.h"
 #include "../drivers/LCD_Driver.h"
 #include "../drivers/extFunctionality.h"
-
+#include "../drivers/DHT.h"
 //global variables,magic numbers etc.
 
 //////////////////////////////////////////////////////////////////////////
@@ -79,6 +79,20 @@ char xButtonGetStatus(void)
 {
 	// See if switch is pressed
 	if((PIN_SWITCH_IP&(1<<BIT_SWITCH_IP)) == 0)
+	{
+		return pdTRUE;
+	}
+	else
+	{
+		return pdFALSE;
+	}
+}
+
+char xSensorGetStatus(void)
+
+{
+	//See if sensor got any data to send
+	if (dht_GetTempUtil(&temperature , &humidity) != -1)
 	{
 		return pdTRUE;
 	}

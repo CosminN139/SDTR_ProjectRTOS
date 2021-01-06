@@ -1,50 +1,37 @@
-#ifndef DHT_H
-#define DHT_H
-/*
-||
-||  Filename:	 		DHT.h
-||  Title: 			    DHTxx Driver
-||  Author: 			Efthymios Koktsidis
-||	Email:				efthymios.ks@gmail.com
-||  Compiler:		 	AVR-GCC
-||	Description:
-||	This library can drive DHT11 and DHT22 sensors.
-||
-*/
+#ifndef __DHT_H__
+#define __DHT_H__
 
-//------ Headers ------//
-#include <inttypes.h>
+/*
+ * DHT Sensor for AVR-GCC Family
+ *
+ * Author      : David Feng
+ * Updated     : June 26th, 2018
+ * Description : DHT Sensor Library for AVR-GCC compiler
+ * Usage       : Use library with AVR-GCC for Atmega family of microcontrollers (tested with Atmega 1284)
+ */
+
+#include <stdio.h>
 #include <avr/io.h>
 
-#include "../include/delay.h"
-#include "DHT_Settings.h"
-//----------------------//
+//Port where DHT sensor is connected
+#define DHT_DDR DDRA
+#define DHT_PORT PORTA
+#define DHT_PIN PINA
+#define DHT_INPUTPIN 7
 
-//----- Auxiliary data -------------------//
-#define DHT11						 1
-#define DHT22						 2
-#define DHT_ReadInterval			1500
+//Define sensor type
+#define DHT_DHT11 0
+#define DHT_DHT22 1
+#define DHT_TYPE DHT_DHT22
 
-#define __DHT_Delay_Setup			2000
+//timeout retries
+#define DHT_TIMEOUT 200
 
-enum DHT_Status_t
-{
-	DHT_Ok,
-	DHT_Error_Humidity,
-	DHT_Error_Temperature,
-	DHT_Error_Checksum,
-	DHT_Error_Timeout
-};
-//-----------------------------------------//
+//functions
+#if DHT_TYPE == 1
+extern int8_t dht_GetTempUtil(uint16_t *temperature, uint16_t *humidity);
+#elif DHT_TYPE == 0
+extern int8_t dht_GetTempUtil(int8_t *temperature, int8_t *humidity);
+#endif
 
-//----- Prototypes---------------------------//
-void DHT_Setup();
-enum DHT_Status_t DHT_GetStatus();
-enum DHT_Status_t DHT_ReadRaw(uint8_t Data[4]);
-enum DHT_Status_t DHT_GetTemperature(double *Temperature);
-enum DHT_Status_t DHT_GetHumidity(double *Humidity);
-enum DHT_Status_t DHT_Read(double *Temperature, double *Humidity);
-double DHT_CelsiusToFahrenheit(double Temperature);
-double DHT_CelsiusToKelvin(double Temperature);
-//-------------------------------------------//
 #endif

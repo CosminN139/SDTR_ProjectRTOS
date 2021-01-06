@@ -32,14 +32,18 @@ every part of HD44870 controller features
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
+#include "include/delay.h"
 
 //user-defined includes
 #include "myTasks.h"
 #include "demos/testLED.h"
 #include "drivers/LCD_Driver.h"
 #include "drivers/extFunctionality.h"
+#include "drivers/DHT.h"
 
 //global variables
+uint16_t temperature;
+uint16_t humidity ;
 
 void vButtonCheckTask( void *pvParameters )
 {
@@ -58,15 +62,40 @@ void vButtonCheckTask( void *pvParameters )
 	}
 }
 
-void vLCDUpdateTask( void *pvParameters )
+void vSensorCheck (void *pvParameters)
+
 {
+	
+	portTickType xLastWakeTime;
+	const portTickType xFrequency = 2000;
+	xLastWakeTime = xTaskGetTickCount();
+	xSemaphoreTake(xSensorSemaphor , (portTickType)0);
+	
+		while(1)
+	{						
+		
+		if (xSensorGetStatus() == pdTRUE)
+		{
+			xSemaphoreGive(xSensorSemaphor);		
+			
+		}
+
+		
+		vTaskDelayUntil(xLastWakeTime , xFrequency);
+	}
+}
+
+void vLCDUpdateTask( void *pvParameters )
+{	
 	static const uint8_t welcomeln1[] PROGMEM="FreeRTOS Software";
 	static const uint8_t eventln1[] PROGMEM="AM APASAT UN BUTONEL";
 	static const uint8_t buttonln1[] PROGMEM="BT:";
 	static const uint8_t tasksln1[] PROGMEM="TSKS:";
 	static const uint8_t emptyln[] PROGMEM="                    ";
+	static const uint8_t templn[] PROGMEM="TMP=";
+	static const uint8_t degln[] PROGMEM="*C RH=";
 	portTickType xLastWakeTime;
-	const portTickType xFrequency = 500;
+	const portTickType xFrequency = 100;
 	xLastWakeTime=xTaskGetTickCount();
 	unsigned portBASE_TYPE uxTasks;
 	LCDinit();
@@ -93,9 +122,21 @@ void vLCDUpdateTask( void *pvParameters )
 				CopyStringtoLCD(eventln1 , 0 , 3);
 				CopyStringtoLCD(emptyln , 0 , 3);
 			}
+			else if (xSemaphoreTake(xSensorSemaphor , (portTickType)0) == pdTRUE)
+			{	
+				taskENTER_CRITICAL();
+				dht_GetTempUtil(&temperature , &humidity);				
+				CopyStringtoLCD(templn , 0 , 1);
+				LCD_printTempHum(temperature , 0);
+				CopyStringtoLCD(degln, 8 ,1);
+				LCD_printTempHum(humidity , 0);	
+				taskEXIT_CRITICAL();		
+			}
 			else
 			{
-				LCDsendChar('0');
+				//LCDGotoXY(4 , 0);
+				CopyStringtoLCD(emptyln , 0 , 3);
+			
 				
 			}
 		}
@@ -205,4 +246,3 @@ void vIntTask(void *pvParameters)
 		
 	}
 }
-

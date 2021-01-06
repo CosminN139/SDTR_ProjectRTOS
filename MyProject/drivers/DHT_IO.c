@@ -1,16 +1,4 @@
-/*
- * DHT_IO.c
- *
- * Created: 12/08/20 
- *  Author: Cosmin Nastase
- */ 
-
-
-/************************************************************************/
-/*                             USAGE
-Using a already written functionality of DHT family of sensors
-to interface correctly with my code.
-Library used: https://github.com/efthymios-ks/AVR-DHT                   */
+/*+     */
 /************************************************************************/
 
 #include <inttypes.h>
