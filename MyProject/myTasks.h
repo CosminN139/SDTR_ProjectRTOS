@@ -14,12 +14,14 @@
 #define LCD_TASK_PRIORITY						(tskIDLE_PRIORITY)
 #define mainButton_TASK_PRIORITY				( tskIDLE_PRIORITY + 1 )
 #define SENSOR_TASK_PRIORITY					(tskIDLE_PRIORITY + 3)
+#define SERIAL_TASK_PRIORITY					(tskIDLE_PRIORITY + 4)
 
 TaskHandle_t myTaskHandle;
 TaskHandle_t mySensorTaskHandle;
 
 extern xSemaphoreHandle xButtonSemaphore;
 extern xSemaphoreHandle xSensorSemaphor;
+extern xSemaphoreHandle xSerialSemaphore;
 extern uint16_t temperature;
 extern uint16_t humidity;
 
@@ -30,5 +32,6 @@ void vIntTask		(void *pvParameters);
 void vLCDUpdateTask  (void *pvParameters);
 void vButtonCheckTask( void *pvParameters );
 void vSensorCheck   (void *pvParameters);
+
 
 #endif /* MYTASKS_H_ */

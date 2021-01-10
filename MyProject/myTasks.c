@@ -40,10 +40,13 @@ every part of HD44870 controller features
 #include "drivers/LCD_Driver.h"
 #include "drivers/extFunctionality.h"
 #include "drivers/DHT.h"
+#include "drivers/UART_Driver.h"
 
 //global variables
 uint16_t temperature;
 uint16_t humidity ;
+
+
 
 void vButtonCheckTask( void *pvParameters )
 {
@@ -67,7 +70,7 @@ void vSensorCheck (void *pvParameters)
 {
 	
 	portTickType xLastWakeTime;
-	const portTickType xFrequency = 2000;
+	const portTickType xFrequency = 2500 *	(	configTICK_RATE_HZ / 1000	);
 	xLastWakeTime = xTaskGetTickCount();
 	xSemaphoreTake(xSensorSemaphor , (portTickType)0);
 	
@@ -76,11 +79,8 @@ void vSensorCheck (void *pvParameters)
 		
 		if (xSensorGetStatus() == pdTRUE)
 		{
-			xSemaphoreGive(xSensorSemaphor);		
-			
-		}
-
-		
+			xSemaphoreGive(xSensorSemaphor);					
+		}		
 		vTaskDelayUntil(xLastWakeTime , xFrequency);
 	}
 }
@@ -94,10 +94,12 @@ void vLCDUpdateTask( void *pvParameters )
 	static const uint8_t emptyln[] PROGMEM="                    ";
 	static const uint8_t templn[] PROGMEM="TMP=";
 	static const uint8_t degln[] PROGMEM="*C RH=";
+	
 	portTickType xLastWakeTime;
 	const portTickType xFrequency = 100;
 	xLastWakeTime=xTaskGetTickCount();
 	unsigned portBASE_TYPE uxTasks;
+	uart0_init();
 	LCDinit();
 	LCDclr();
 	LCDcursorOFF();
@@ -121,24 +123,33 @@ void vLCDUpdateTask( void *pvParameters )
 				LCDsendChar('1');				
 				CopyStringtoLCD(eventln1 , 0 , 3);
 				CopyStringtoLCD(emptyln , 0 , 3);
+				uart0_transmitString_flash(eventln1);
+				uart0_tx_newline;
 			}
 			else if (xSemaphoreTake(xSensorSemaphor , (portTickType)0) == pdTRUE)
 			{	
 				taskENTER_CRITICAL();
 				dht_GetTempUtil(&temperature , &humidity);				
+				
 				CopyStringtoLCD(templn , 0 , 1);
 				LCD_printTempHum(temperature , 0);
 				CopyStringtoLCD(degln, 8 ,1);
-				LCD_printTempHum(humidity , 0);	
-				taskEXIT_CRITICAL();		
+				LCD_printTempHum(humidity , 0);		
+				uart0_transmitString_flash(templn);
+				uart0_print_temperaturehumidity(temperature,0);
+				uart0_transmitString_flash(degln);
+				uart0_print_temperaturehumidity(humidity,0);
+				uart0_tx_newline;	
+				taskEXIT_CRITICAL();			
 			}
+
 			else
 			{
-				//LCDGotoXY(4 , 0);
-				CopyStringtoLCD(emptyln , 0 , 3);
-			
-				
+				CopyStringtoLCD(emptyln , 0 ,3);
+				uart0_transmit_string("nop");
+				uart0_tx_newline;
 			}
+		
 		}
 		vTaskDelayUntil(&xLastWakeTime,xFrequency);
 	}

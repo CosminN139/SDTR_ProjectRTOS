@@ -21,6 +21,7 @@
 #include "../drivers/LCD_Driver.h"
 #include "../drivers/extFunctionality.h"
 #include "../drivers/DHT.h"
+#include "../drivers/UART_Driver.h"
 //global variables,magic numbers etc.
 
 //////////////////////////////////////////////////////////////////////////
@@ -75,6 +76,15 @@ void vButtonInit(void)
 	// Enable pull-up on SWITCH_IP
 	PORT_SWITCH_IP |= (1<<BIT_SWITCH_IP);
 }
+
+void vButtonSerialInit(void)
+{
+	// Set SWITCH_IP as input pin
+	DDR_SWITCHSERIAL_IP &= ~(1<<BIT_SWITCHSERIAL_IP);
+	// Enable pull-up on SWITCH_IP
+	PORT_SWITCHSERIAL_IP |= (1<<BIT_SWITCHSERIAL_IP);
+}
+
 char xButtonGetStatus(void)
 {
 	// See if switch is pressed
@@ -90,12 +100,29 @@ char xButtonGetStatus(void)
 
 char xSensorGetStatus(void)
 
-{
+{	
 	//See if sensor got any data to send
 	if (dht_GetTempUtil(&temperature , &humidity) != -1)
 	{
 		return pdTRUE;
 	}
+	else
+	{
+		return pdFALSE;
+	}	
+}
+
+char xSerialGetStatus(void)
+{
+	//Check if we have some messages to deal with on serial rx
+	 
+	
+	//See if the magic button on board is pressed
+	if ((PIN_SWITCHSERIAL_IP&(1<<BIT_SWITCHSERIAL_IP)) == 0)
+	{
+		return pdFALSE;
+	}
+	//no magic moment occures right now
 	else
 	{
 		return pdFALSE;

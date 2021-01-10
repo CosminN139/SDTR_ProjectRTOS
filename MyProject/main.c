@@ -59,6 +59,7 @@ Added a little feature...a button without interrupts. Its main task is to print 
 //global variables,magic numbers etc.
 xSemaphoreHandle xButtonSemaphore = NULL;
 xSemaphoreHandle xSensorSemaphor = NULL;
+xSemaphoreHandle xSerialSemaphore = NULL;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -68,8 +69,7 @@ portSHORT main(void)
 
 	
 	vSemaphoreCreateBinary(xButtonSemaphore);
-	vSemaphoreCreateBinary(xSensorSemaphor);
-	
+	vSemaphoreCreateBinary(xSensorSemaphor);	
 	
 	
 	if(xButtonSemaphore!=NULL)
@@ -83,6 +83,7 @@ portSHORT main(void)
 		xTaskCreate(vSensorCheck, (const char*) "Senzor Umiditate/Temp" , 2048 , NULL ,SENSOR_TASK_PRIORITY , NULL);
 	}
 	
+
   // xTaskCreate(vFlashLEDTask1, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
   //xTaskCreate(vFlashLEDTask2, (const char *) "LED" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , NULL);
   //xTaskCreate(vIntTask	     , (const char *) "interrupt" , configMINIMAL_STACK_SIZE , NULL , LED_TASK_PRIORITY , &myTaskHandle);
