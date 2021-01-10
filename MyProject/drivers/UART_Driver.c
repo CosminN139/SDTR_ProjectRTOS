@@ -8,6 +8,7 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include "UART_Driver.h"
+#include "../include/delay.h"
 
 //////////////////////////////////////////////////////////////////////////
 /************************************************************************/
@@ -72,17 +73,19 @@ void uart0_transmit_string(int8_t* string)
 	
 }
 
-void uart0_print_temperaturehumidity(uint16_t temp, unsigned char cur_count)
+void uart0_print_temperaturehumidity(int8_t temp, unsigned char cur_count)
 {
 	unsigned char ten_count = 0;
 	unsigned char hun_count = 0;
+	
+	int8_t datastring;
 	
 	while( temp >= 100 ) {
 		hun_count++;
 		temp -= 100;
 	}
 	
-	uart0_transmit_string(hun_count + "0");
+	uart0_transmit_string(hun_count);
 	cur_count++;
 
 	
@@ -91,12 +94,11 @@ void uart0_print_temperaturehumidity(uint16_t temp, unsigned char cur_count)
 		temp -= 10;
 	}
 	
-	uart0_transmit_string(ten_count + "0");
-	cur_count++;
-	
+	uart0_transmit_string(ten_count);
+	cur_count++;	
+
 	uart0_transmit_string(".");
-	cur_count++;
-	
-	uart0_transmit_string(temp + "0");
+	cur_count++;	
+	uart0_transmit_string(temp);
 
 }

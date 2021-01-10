@@ -102,7 +102,7 @@ char xSensorGetStatus(void)
 
 {	
 	//See if sensor got any data to send
-	if (dht_GetTempUtil(&temperature , &humidity) != -1)
+	if (dht_GetTempUtil(NULL , NULL) != -1)
 	{
 		return pdTRUE;
 	}

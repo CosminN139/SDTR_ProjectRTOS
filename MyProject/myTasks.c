@@ -80,8 +80,9 @@ void vSensorCheck (void *pvParameters)
 		if (xSensorGetStatus() == pdTRUE)
 		{
 			xSemaphoreGive(xSensorSemaphor);					
-		}		
+		}			
 		vTaskDelayUntil(xLastWakeTime , xFrequency);
+		
 	}
 }
 
@@ -117,36 +118,40 @@ void vLCDUpdateTask( void *pvParameters )
 		if (xButtonSemaphore != NULL)
 		{
 			LCDGotoXY(3,2);
-			//poll
+						//poll
 			if (xSemaphoreTake(xButtonSemaphore, (portTickType)0)==pdTRUE)
 			{
 				LCDsendChar('1');				
 				CopyStringtoLCD(eventln1 , 0 , 3);
 				CopyStringtoLCD(emptyln , 0 , 3);
+				CopyStringtoLCD("0" , 2 ,3);				
 				uart0_transmitString_flash(eventln1);
 				uart0_tx_newline;
+
 			}
 			else if (xSemaphoreTake(xSensorSemaphor , (portTickType)0) == pdTRUE)
 			{	
 				taskENTER_CRITICAL();
-				dht_GetTempUtil(&temperature , &humidity);				
-				
+				dht_GetTempUtil(&temperature , &humidity);	
+				taskEXIT_CRITICAL();
+							
 				CopyStringtoLCD(templn , 0 , 1);
 				LCD_printTempHum(temperature , 0);
 				CopyStringtoLCD(degln, 8 ,1);
 				LCD_printTempHum(humidity , 0);		
-				uart0_transmitString_flash(templn);
+				/*uart0_transmitString_flash(templn);
 				uart0_print_temperaturehumidity(temperature,0);
 				uart0_transmitString_flash(degln);
-				uart0_print_temperaturehumidity(humidity,0);
+				uart0_print_temperaturehumidity(humidity,0);*/
+				uart0_transmit_string("Sensor reported data");
 				uart0_tx_newline;	
-				taskEXIT_CRITICAL();			
+							
 			}
 
 			else
 			{
 				CopyStringtoLCD(emptyln , 0 ,3);
-				uart0_transmit_string("nop");
+				uart0_transmit_string("Waiting for sensor refresh");
 				uart0_tx_newline;
 			}
 		

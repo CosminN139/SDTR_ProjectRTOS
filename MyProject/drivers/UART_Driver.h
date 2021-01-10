@@ -18,7 +18,7 @@ uint8_t uart0_receive_byte(void);
 void uart0_transmit_byte(uint8_t data);
 void uart0_transmitString_flash(int8_t* string);
 void uart0_transmit_string(int8_t* string);
-void uart0_print_temperaturehumidity(uint16_t temp , unsigned char cur_count);
+void uart0_print_temperaturehumidity(int8_t temp , unsigned char cur_count);
 
 
 
