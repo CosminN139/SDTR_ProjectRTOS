@@ -43,8 +43,18 @@ Updates from last time i've wrote some code:
 - Tried to integrate an alredy written DHT library in code, meh...to much errors for a little cheat. Rewrite the library myself.
 - Kinda added some hardcoded macros to hack the functionality of AVR-DHT library used for that sensor
 >> Library used: https://github.com/efthymios-ks/AVR-DHT
+- Left away in the dust that library for DHT and used an even simpler one because some sort of hickups of Atmel Studio that does not support user-defined macros by default... $#%#$%@#!@$!#$^@#$%#$$R@$#@E
+- Implemented a fully-functional UART driver and send messages through RS232 to a terminal with 250kBauds rate succesfully ... CAN2.0 to the next station :)
 
 TODO:
 
-- Add sensor library and make some prerequisites to drive it properly -> Done
+- Add sensor library and make some prerequisites to drive it properly -> not as done as hoped for, but is working pretty good for demo purposes
 >> This sensor will be a temp/humid sensor from DHT/AMS family
+
+***
+Further improvements:
+
+  There are some things to improve surely about , but as for a starter project in this kind middleware usage I am pretty much happy with what I've managed to achieve. FreeRTOS is a powerful tool for any microcontroller that you can use for embedded solutions. In a nutshell , you can get easily better timings for each function used in the system , a better memory management(RTOS has 5 structures of heaps for organising the program memory that can be used for a better strategy of memory management in the program).Using tasks, putting datapoints in Queues to transport anywhere it needs to be, managing every priority , exclusions and other functionalities are becoming pretty much handy in development of firmware.
+
+  Of course, the main upgrade in the BMS2.0 that needs to be implemented will be migration from the simpler PIC16 architecture that I used in the original project to the low-power STM32 solution. 
+  The AVR8 chosen to implement FreeRTOS in this project was strictly to "learn" a bit the usage of a RTOS on microcontrollers, due the fact that was the first-first time ever that I've wrote a code with RTOS from the ground zero (Audio-Widget project was not written by scratch , as i telled about so in that repo), so i've learned some things, but are more things to get used until i can tell "yeah, i can release a project that is meant to be realiable".
